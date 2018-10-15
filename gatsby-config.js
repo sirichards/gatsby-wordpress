@@ -1,9 +1,11 @@
 module.exports = {
 	siteMetadata: {
-		title: 'Gatsby Default Starter',
+		title: 'Gatsby WordPress Template',
 	},
 	plugins: [
+		'gatsby-plugin-resolve-src',
 		'gatsby-plugin-react-helmet',
+		'gatsby-plugin-offline',
 		{
 			resolve: `gatsby-plugin-manifest`,
 			options: {
@@ -14,6 +16,26 @@ module.exports = {
 				theme_color: '#663399',
 				display: 'minimal-ui',
 				icon: 'src/images/gatsby-icon.png', // This path is relative to the root of the site.
+			},
+		},
+		// {
+		// 	resolve: `gatsby-plugin-canonical-urls`,
+		// 	options: {
+		// 		siteUrl: `https://www.esmeloans.com`,
+		// 	},
+		// },
+		{
+			resolve: `gatsby-plugin-google-tagmanager`,
+			options: {
+				id: "GTM-MPFMW8W",
+
+				// Include GTM in development.
+				// Defaults to false meaning GTM will only be loaded in production.
+				includeInDevelopment: true,
+
+				// Specify optional GTM environment details.
+				// gtmAuth: "YOUR_GOOGLE_TAGMANAGER_ENVIROMENT_AUTH_STRING",
+				// gtmPreview: "YOUR_GOOGLE_TAGMANAGER_ENVIROMENT_PREVIEW_NAME",
 			},
 		},
 		{
@@ -36,6 +58,37 @@ module.exports = {
 				useACF: true,
 			},
 		},
-		'gatsby-plugin-offline',
+		{
+			resolve: `gatsby-plugin-sass`,
+			options: {
+				precision: 8
+			},
+		},
+		{
+			resolve: `gatsby-plugin-sitemap`,
+			options: {
+				output: `/sitemap.xml`,
+				// Exclude specific pages or groups of pages using glob parameters
+				// See: https://github.com/isaacs/minimatch
+				// The example below will exclude the single `path/to/page` and all routes beginning with `category`
+				// exclude: ["/page-name/*"],
+				query: `
+				{
+					site {
+						siteMetadata {
+							siteUrl
+						}
+					}
+			
+					allSitePage {
+						edges {
+							node {
+								path
+							}
+						}
+					}
+				}`
+			}
+		},
 	],
 }

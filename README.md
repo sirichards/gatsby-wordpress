@@ -104,3 +104,18 @@ Looking for more guidance? Full documentation for Gatsby lives [on the website](
 ## 💫 Deploy
 
 [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/gatsbyjs/gatsby-starter-default)
+
+
+
+## Project Notes
+
+This is built to match a classic WP theme / functionality as close as possible, i.e. user can create new pages, update navigation, select templates, select flexible content, change front page.
+
+gatsby-node.js - Fetches WP data and feeds to ...
+    - templates/page.js 
+    - templates/frontpage.js
+    - templates/post.js ... or any other pre-defined post types
+    Both use pageSelector.js to select correct template, we do this as the front page could be any template, not necessarily a home page template in WP
+        - templates/pageSelector.js
+            - components/Pages/...
+            - components/Pages/page-template - Uses flexible layouts based on ACF

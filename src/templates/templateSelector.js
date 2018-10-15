@@ -1,9 +1,9 @@
 import React, { Component } from "react"
 import Layout from "../components/layout"
-import DefaultPage from "../components/Pages/defaultPage"
-import HomePage from "../components/Pages/homePage"
+import DefaultPage from "../components/PageTemplates/DefaultPage"
+import HomePage from "../components/PageTemplates/HomePage"
 
-class PageSelector extends Component {
+class TemplateSelector extends Component {
 
     render() {
         const data = this.props.data
@@ -11,14 +11,14 @@ class PageSelector extends Component {
 
         if (template === 'template-home.php') {
             return (
-                <Layout>
+                <Layout data={data}>
                     <HomePage data={data} />
                 </Layout>
             )
         } else {
             // Default template
             return (
-                <Layout>
+                <Layout data={data}>
                     <DefaultPage data={data} />
                 </Layout>
             )
@@ -27,4 +27,4 @@ class PageSelector extends Component {
     }
 }
 
-export default PageSelector
+export default TemplateSelector

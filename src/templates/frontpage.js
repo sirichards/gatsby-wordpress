@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import { graphql } from "gatsby"
 import * as PropTypes from "prop-types"
-import PageSelector from "./pageSelector"
+import TemplateSelector from "./templateSelector"
 
 const propTypes = {
     data: PropTypes.object.isRequired,
@@ -12,7 +12,7 @@ class FrontPage extends Component {
         const data = this.props.data.wordpressWpFrontpage
 
         return (
-            <PageSelector data={data} />
+            <TemplateSelector data={data} />
         )
 
     }
@@ -29,6 +29,22 @@ query($id: String!) {
         template
         title
         content
+        acf {
+            flexible_content_page {
+                __typename
+
+                ... on WordPressAcf_full_width_text {
+                    id
+                    text
+                }        	
+
+                ... on WordPressAcf_2_columns_text {
+                    id
+                    text
+                    text_2
+                }
+            }
+        }
     }
 }
 `

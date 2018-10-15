@@ -9,6 +9,66 @@ const _ = require(`lodash`)
 const Promise = require(`bluebird`)
 const path = require(`path`)
 const slash = require(`slash`)
+const url = require('url');
+
+// 
+exports.sourceNodes = ({ getNodes, actions }) => {
+    const { createNodeField } = actions;
+
+    const pageNodes = getNodes().filter(
+        node => node.internal.type === "wordpress__PAGE"
+    );
+
+    // const menuNodes = getNodes().filter(
+    //     node => node.internal.type === "wordpress__wp_api_menus_menus_items"
+    // );
+
+    // const bla = getNodes().forEach(node => {
+    //     console.log(node.internal.type)
+    // });
+
+    // console.log(menuNodes)
+
+    // Extend WP pages response to include full page path
+    pageNodes.forEach(pageNode => {
+        let pathFragments = [];
+        let tmpNode = pageNode;
+        do {
+            pathFragments.push(tmpNode.slug);
+            tmpNode = pageNodes.find(
+                node => node.wordpress_id === tmpNode.wordpress_parent
+            );
+        } while (tmpNode);
+
+        const path = pathFragments.reverse().join("/");
+        createNodeField({
+            node: pageNode,
+            name: `path`,
+            value: path
+        });
+    });
+
+    // Extend WP menu response to include full page path
+    // menuNodes.forEach(menuNode => {
+
+    //     menuNode.items.forEach(menuItem => {
+    //         let tmpUrl = menuItem.url
+    //         const path = url.parse(tmpUrl).pathname 
+
+    //         console.log(tmpUrl)
+    //         console.log(path)
+
+    //         // createNodeField({
+    //         //     node: menuItem,
+    //         //     name: `path`,
+    //         //     value: path
+    //         // });
+
+    //     })
+
+    // });
+    
+};
 
 // Implement the Gatsby API “createPages”. This is
 // called after the Gatsby bootstrap is finished so you have
@@ -61,7 +121,9 @@ exports.createPages = ({ graphql, actions }) => {
                         edges {
                             node {
                                 id
-                                slug
+                                fields {
+                                    path
+                                }
                             }
                         }
                     }
@@ -76,7 +138,7 @@ exports.createPages = ({ graphql, actions }) => {
 
                 _.each(result.data.allWordpressPage.edges, edge => {
                     createPage({
-                        path: `/${edge.node.slug}/`,
+                        path: `/${edge.node.fields.path}/`,
                         component: slash(pageTemplate),
                         context: {
                             id: edge.node.id,

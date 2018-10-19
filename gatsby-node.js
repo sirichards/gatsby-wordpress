@@ -33,6 +33,9 @@ exports.sourceNodes = ({ getNodes, actions }) => {
     pageNodes.forEach(pageNode => {
         let pathFragments = [];
         let tmpNode = pageNode;
+
+        console.log(pageNode)
+
         do {
             pathFragments.push(tmpNode.slug);
             tmpNode = pageNodes.find(
